@@ -1,0 +1,25 @@
+---
+- name: Create EC2 Instances
+  hosts: localhost
+  gather_facts: False
+  vars:
+    keypair: cntrlserv1
+    instance_type: t2.micro
+    image: ami-03291866
+    region: us-east-2
+    num_host: 2
+  tasks:
+    - name: Launch Instance
+      ec2:
+         key_name: "{{ keypair }}"
+         group: mysg-demo
+         instance_type: "{{ instance_type }}"
+         image: "{{ image }}"
+         wait: true
+         region: "{{ region }}"
+         count: "{{ num_host }}"
+         aws_access_key: *******
+         aws_secret_key: ********
+      register: ec2
+    - name: Print all ec2 variables
+      debug: var=ec2
