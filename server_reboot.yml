@@ -1,5 +1,5 @@
 ---
-- hosts: auto_scale_serv
+- hosts: maint_cluster
   become: true
 
   tasks:
