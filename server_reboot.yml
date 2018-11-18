@@ -1,5 +1,5 @@
 ---
-- hosts: abc
+- hosts: auto_scale_serv
   become: true
 
   tasks:
