@@ -1,16 +1,24 @@
 ---
-- hosts: all
+- hosts: abc
   become: true
-  
+
   tasks:
-   - name: reboot hosts
+   - name: rebooting hosts
      shell: sleep 5 && shutdown -r now
      async: 1
      poll: 0
      ignore_errors: yes
-     
+
    - name: Waiting for servers to come back
-     become: false
+     become: no
      local_action: wait_for host={{ inventory_hostname }} port=22
                    search_regex=OpenSSH state=started delay=5
-...
+
+   - name: Checking server uptime
+     #shell: sleep 10 && /usr/bin/uptime | grep -oeh 'up .*' | sed 's/,//g' | awk '{ print $2" "$3 }'
+     shell: sleep 10 && /usr/bin/uptime
+     changed_when: False
+     register: shell_result
+
+   - debug:
+       var: shell_result.stdout_lines
